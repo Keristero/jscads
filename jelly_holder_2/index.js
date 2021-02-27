@@ -18,7 +18,6 @@ function stackableStand() {
     let matarialThickness = 0.25
     let legClearance = 7
     let legHeight = legClearance+(matarialThickness*2)
-    let legOffset = 1
     let legCount = 4
     let legAttachmentHoleClearance = 0.055
     
@@ -39,12 +38,19 @@ function stackableStand() {
 
             let xCenter = (column*holeSupportDiameter)+(column*extraSpaceBetweenHoles)
             let yCenter = (row*holeSupportDiameter)+(row*extraSpaceBetweenHoles)
-
-            var support = cuboid({center: [xCenter,yCenter,halfMatarialThickness], size: [columnSupportLength, matarialThickness, matarialThickness]})
-            supports.push(support)
+            
+            if(column > 0 && column < holeColumns){
+                var support = cuboid({center: [xCenter-(holeSupportRadius+(extraSpaceBetweenHoles/2)),yCenter,halfMatarialThickness], size: [columnSupportLength, matarialThickness, matarialThickness]})
+                supports.push(support)
+            }
 
             if(row > 0){
                 var support = cuboid({center: [xCenter,yCenter-(holeSupportRadius+(extraSpaceBetweenHoles/2)),halfMatarialThickness], size: [matarialThickness, rowSupportLength, matarialThickness]})
+                supports.push(support)
+            }
+
+            if(column == 0 || column == holeColumns-1){
+                var support = cuboid({center: [xCenter,yCenter,halfMatarialThickness], size: [matarialThickness, rowSupportLength, matarialThickness]})
                 supports.push(support)
             }
 
@@ -53,7 +59,7 @@ function stackableStand() {
                 center: [xCenter,yCenter,halfMatarialThickness],
                 startRadius: [holeSupportRadius, holeSupportRadius], 
                 endRadius: [holeSupportRadius, holeSupportRadius],
-                segments: 32
+                segments: 64
             })
             cylinders.push(c)
 
