@@ -20,14 +20,14 @@ let circleResolution = 128
 function plug(){
     let plugSeal = cylinder({radius: plugSealRadius, height: plugSealThickness, center:[0,0,plugSealThickness/2],segments:circleResolution})
     let plugSpacer = cylinder({radius: spacerRadius, height: spacerThickness, center:[0,0,plugSealThickness+(spacerThickness/2)],segments:circleResolution})
-    //Indent for back plate of plug which screws in
-    let plugSpacerIndent = cylinder({radius: spacerIndentRadius, height: spacerIndentDepth*2, center:[0,0,plugSealThickness+spacerThickness]})
-    let plugSpacerWithIndent = subtract(plugSpacer,plugSpacerIndent)
     //Screw hole for connecting back plate to hold the seal in place
     let screwHoleCylinder = cylinder({radius: plugScrewRadius, height: plugSealThickness+spacerThickness, center:[0,0,(plugSealThickness+spacerThickness)/2]})
-    let plug = union(plugSeal,plugSpacerWithIndent)
+    let plug = union(plugSeal,plugSpacer)
     let plugWithHole = subtract(plug,screwHoleCylinder)
-    return plugWithHole
+    //Indent for back plate of plug which screws in
+    let plugIndent = cylinder({radius: spacerIndentRadius, height: spacerIndentDepth*2, center:[0,0,spacerIndentDepth]})
+    let plugWithIndent = subtract(plugWithHole,plugIndent)
+    return plugWithIndent
 }
 
 // Used during design and testing

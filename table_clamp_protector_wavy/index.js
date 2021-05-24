@@ -9,7 +9,7 @@ const { hullChain } = require('@jscad/modeling').hulls
 
 let tableThicknessMilimeters = 25 //internal thickness of table which it clamps around
 let printThickness = 3 //matarial thickness for protecting table
-let depth = 45 //distance it protrudes onto the desk
+let depth = 50 //distance it protrudes onto the desk
 let width = 40
 let gripWiggleFreqency = 1
 let gripWiggleAmplitude = 1

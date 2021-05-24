@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@jscad/core": "^0.4.0",
-    "@jscad/modeling": "^2.0.0-alpha.4"
+    "@jscad/modeling": "^2.0.0-alpha.4",
+    "@jscad/svg-deserializer": "^0.4.3"
   }
 }
