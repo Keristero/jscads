@@ -21,7 +21,7 @@ const main = () => {
     let sphere_width = 50
     let height = 13
     let cover = cylinder({radius: (sphere_width/2),height:height,segments:64,center:[0,0,height/2]})
-    let led_cutout = cylinder({radius: (sphere_width/2)-0.5,height:height,segments:64,center:[0,0,(height/2)-0.5]})
+    let led_cutout = cylinder({radius: (sphere_width/2)-1,height:height,segments:64,center:[0,0,(height/2)-0.5]})
     let hollow_cover = subtract(cover,led_cutout)
     let screw_block = screw_slot([-21.5,0,height/2],height,2)
     let screw_block_2 = screw_slot([21.5,0,height/2],height,2)
