@@ -11,6 +11,7 @@ const { hullChain } = require('@jscad/modeling').hulls
 let circleResolution = 64
 let lip_and_groove_depth = 2
 let lip_and_groove_tolerance = 0.1
+let lid_and_lid_support_tolerance = 0.1
 
 function getObject({ wall_thickness, outer_width, outer_length, outer_height,roundedness,holes_through_length,holes_through_width,hole_diameter,hole_membrane_thickness,mounting_screw_diameter,mounting_screw_rows,mounting_screw_row_gap,mounting_screw_extra_depth}) {
     let double_wall_thickness = wall_thickness*2
@@ -112,7 +113,7 @@ function getObject({ wall_thickness, outer_width, outer_length, outer_height,rou
     let screw_bases = []
     let sd = mounting_screw_row_gap
     let screw_hole_base_height = wall_thickness+mounting_screw_extra_depth
-    let base_diameter = mounting_screw_diameter*1.5
+    let base_diameter = mounting_screw_diameter*3
     for(let row = 0; row < mounting_screw_rows; row++){
         let hole_locations = [
             [sd,sd],
@@ -129,7 +130,7 @@ function getObject({ wall_thickness, outer_width, outer_length, outer_height,rou
             let screw_hole_base = cylinder({
                 center:[hole_location[0],hole_location[1],screw_hole_base_height/2],
                 height: screw_hole_base_height, 
-                radius: base_diameter
+                radius: base_diameter/2
             })
             screw_bases.push(screw_hole_base)
             screw_holes.push(screw_hole)
@@ -138,7 +139,7 @@ function getObject({ wall_thickness, outer_width, outer_length, outer_height,rou
     }
 
     //lid screws
-    sd = base_diameter+wall_thickness
+    sd = (base_diameter/2)+wall_thickness+lid_and_lid_support_tolerance
     screw_hole_base_height = wall_thickness+inner_height
     let hole_locations = [
         [sd,sd],
@@ -155,27 +156,44 @@ function getObject({ wall_thickness, outer_width, outer_length, outer_height,rou
         let screw_hole_base = cylinder({
             center:[hole_location[0],hole_location[1],screw_hole_base_height/2],
             height: screw_hole_base_height, 
-            radius: base_diameter
+            radius: base_diameter/2
         })
-        let support_width = (base_diameter*2)+wall_thickness
-        let lid_screw_support = roundedCuboid({
-            center:[hole_location[0],hole_location[1],screw_hole_base_height/4],
-            size: [support_width, support_width, screw_hole_base_height/2], 
-            roundRadius: roundedness, 
-            segments: rounding_resolution
+        let screw_hole_base_negative = cylinder({
+            center:[hole_location[0],hole_location[1],screw_hole_base_height/2],
+            height: screw_hole_base_height+lid_and_lid_support_tolerance, 
+            radius: (base_diameter/2)+lid_and_lid_support_tolerance
         })
+        top_half = subtract(top_half,screw_hole_base_negative)
+
+
         screw_bases.push(screw_hole_base)
-        screw_bases.push(lid_screw_support)
         screw_holes.push(screw_hole)
     }
-    sd+= mounting_screw_row_gap
+
+    let support_height = (outer_height/2)
+    let support_width = (base_diameter*0.8)
+    sd = (support_width/2)+wall_thickness
+    let extra_support_locations = [
+        [sd,sd],
+        [outer_width-sd,sd],
+        [sd,outer_length-sd],
+        [outer_width-sd,outer_length-sd],
+    ]
+    for(let support_location of extra_support_locations){
+        let lid_screw_support = cuboid({
+            center:[support_location[0],support_location[1],support_height/2],
+            size: [support_width, support_width, support_height]
+        })
+        screw_bases.push(lid_screw_support)
+    }
 
     bottom_half = union(bottom_half,screw_bases)
     bottom_half = subtract(bottom_half,screw_holes)
-    top_half = subtract(top_half,screw_bases)
     top_half = subtract(top_half,screw_holes)
 
-    top_half = colorize([0.5,0.5,1,0.5], top_half)
+    top_half = translate([outer_width+2,-outer_length,-outer_height],top_half)
+
+    top_half = rotate([Math.PI, 0, 0], top_half)
        
     return [bottom_half,top_half]
 }
@@ -184,12 +202,12 @@ function getParameterDefinitions() {
     return [
         { name: 'wall_thickness', type: 'float', initial: 1.5, caption: 'wall_thickness' },
         { name: 'outer_width', type: 'float', initial: 70, caption: 'outer_width' },
-        { name: 'outer_length', type: 'float', initial: 100, caption: 'outer_length' },
+        { name: 'outer_length', type: 'float', initial: 70, caption: 'outer_length' },
         { name: 'outer_height', type: 'float', initial: 35, caption: 'outer_height' },
         { name: 'roundedness', type: 'float', initial: 1, caption: 'roundedness' },
         { name: 'hole_diameter', type: 'float', initial:20, caption: 'hole_diameter' },
         { name: 'holes_through_length', type: 'int', initial: 1, caption: 'holes_through_length' },
-        { name: 'holes_through_width', type: 'int', initial: 2, caption: 'holes_through_width' },
+        { name: 'holes_through_width', type: 'int', initial: 1, caption: 'holes_through_width' },
         { name: 'hole_membrane_thickness', type: 'float', initial: 0.4, caption: 'hole_membrane_thickness' },
         { name: 'mounting_screw_diameter', type: 'float', initial: 2, caption: 'mounting_screw_diameter' },
         { name: 'mounting_screw_extra_depth', type: 'float', initial: 1, caption: 'mounting_screw_extra_depth' },
