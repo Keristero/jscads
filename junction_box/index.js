@@ -10,8 +10,8 @@ const { hullChain } = require('@jscad/modeling').hulls
 
 let circleResolution = 64
 let lip_and_groove_depth = 2
-let lip_and_groove_tolerance = 0.1
-let lid_and_lid_support_tolerance = 0.1
+let lip_and_groove_tolerance = 0.2
+let lid_and_lid_support_tolerance = 0.2
 
 function getObject({ wall_thickness, outer_width, outer_length, outer_height,roundedness,holes_through_length,holes_through_width,hole_diameter,hole_membrane_thickness,mounting_screw_diameter,mounting_screw_rows,mounting_screw_row_gap,mounting_screw_extra_depth}) {
     let double_wall_thickness = wall_thickness*2
