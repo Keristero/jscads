@@ -9,11 +9,13 @@ const { colorize } = require('@jscad/modeling').colors
 const { hullChain } = require('@jscad/modeling').hulls
 
 let circleResolution = 64
-let lip_and_groove_depth = 2
-let lip_and_groove_tolerance = 0.2
-let lid_and_lid_support_tolerance = 0.2
+let lip_and_groove_depth = 3
+let lip_and_groove_tolerance = 0.3
+let lid_and_lid_support_tolerance = 1
+let screw_diameter_tolerance = 1
 
 function getObject({ wall_thickness, outer_width, outer_length, outer_height,roundedness,holes_through_length,holes_through_width,hole_diameter,hole_membrane_thickness,mounting_screw_diameter,mounting_screw_rows,mounting_screw_row_gap,mounting_screw_extra_depth}) {
+    mounting_screw_diameter = mounting_screw_diameter + screw_diameter_tolerance
     let double_wall_thickness = wall_thickness*2
     let half_wall_thickness = wall_thickness/2
     let rounding_resolution = 16
@@ -200,7 +202,7 @@ function getObject({ wall_thickness, outer_width, outer_length, outer_height,rou
 
 function getParameterDefinitions() {
     return [
-        { name: 'wall_thickness', type: 'float', initial: 1.5, caption: 'wall_thickness' },
+        { name: 'wall_thickness', type: 'float', initial: 2, caption: 'wall_thickness' },
         { name: 'outer_width', type: 'float', initial: 70, caption: 'outer_width' },
         { name: 'outer_length', type: 'float', initial: 70, caption: 'outer_length' },
         { name: 'outer_height', type: 'float', initial: 35, caption: 'outer_height' },
@@ -208,11 +210,11 @@ function getParameterDefinitions() {
         { name: 'hole_diameter', type: 'float', initial:20, caption: 'hole_diameter' },
         { name: 'holes_through_length', type: 'int', initial: 1, caption: 'holes_through_length' },
         { name: 'holes_through_width', type: 'int', initial: 1, caption: 'holes_through_width' },
-        { name: 'hole_membrane_thickness', type: 'float', initial: 0.4, caption: 'hole_membrane_thickness' },
+        { name: 'hole_membrane_thickness', type: 'float', initial: 0.41, caption: 'hole_membrane_thickness' },
         { name: 'mounting_screw_diameter', type: 'float', initial: 2, caption: 'mounting_screw_diameter' },
         { name: 'mounting_screw_extra_depth', type: 'float', initial: 1, caption: 'mounting_screw_extra_depth' },
-        { name: 'mounting_screw_rows', type: 'int', initial: 2, caption: 'mounting_screw_rows' },
-        { name: 'mounting_screw_row_gap', type: 'int', initial: 10, caption: 'mounting_screw_row_gap' },
+        { name: 'mounting_screw_rows', type: 'int', initial: 1, caption: 'mounting_screw_rows' },
+        { name: 'mounting_screw_row_gap', type: 'int', initial: 20, caption: 'mounting_screw_row_gap' },
     ];
 }
 
