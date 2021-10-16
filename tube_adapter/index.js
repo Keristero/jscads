@@ -27,16 +27,16 @@ function make_tube_section({ height, startRadius, endRadius, wall_thickness, cen
     return subtract(outer_cylinder, inner_cylinder)
 }
 
-function getObject({bottom_inner_diameter,top_inner_diameter,connector_length,transition_length,wall_thickness}) {
+function getObject({bottom_inner_diameter,top_inner_diameter,bottom_connector_length,top_connector_length,transition_length,wall_thickness}) {
     let y = 0
     let btm_options = {
         startRadius: bottom_inner_diameter/2,
         endRadius: bottom_inner_diameter/2,
-        height: connector_length,
+        height: bottom_connector_length,
         wall_thickness,
-        center: [0, 0, y+connector_length/2]
+        center: [0, 0, y+bottom_connector_length/2]
     }
-    y += connector_length
+    y += bottom_connector_length
     let bottom_connector = make_tube_section(btm_options)
     let trans_options = {
         startRadius: bottom_inner_diameter/2,
@@ -50,9 +50,9 @@ function getObject({bottom_inner_diameter,top_inner_diameter,connector_length,tr
     let top_options = {
         startRadius: top_inner_diameter/2,
         endRadius: top_inner_diameter/2,
-        height: connector_length,
+        height: top_connector_length,
         wall_thickness,
-        center: [0, 0, y+connector_length/2]
+        center: [0, 0, y+top_connector_length/2]
     }
     let top = make_tube_section(top_options)
     let final = union(bottom_connector, transition, top)
@@ -64,7 +64,8 @@ function getParameterDefinitions() {
         { name: 'top_inner_diameter', type: 'int', initial: 144, caption: 'Top Inner Diameter' },
         { name: 'bottom_inner_diameter', type: 'int', initial: 205, caption: 'Bottom Inner Diameter' }, 
         { name: 'wall_thickness', type: 'int', initial: 1, caption: 'Wall thickness' },
-        { name: 'connector_length', type: 'int', initial: 50, caption: 'Connector Length' },
+        { name: 'top_connector_length', type: 'int', initial: 50, caption: 'Top Connector Length' },
+        { name: 'bottom_connector_length', type: 'int', initial: 50, caption: 'Bottom Connector Length' },
         { name: 'transition_length', type: 'int', initial: 50, caption: 'Transition Length' },
     ];
 }

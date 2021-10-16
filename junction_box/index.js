@@ -107,6 +107,7 @@ function getObject({ wall_thickness, outer_width, outer_length, outer_height,rou
 
     //Add tolerance to overhang mask
     overhang_mask = expand({delta: lip_and_groove_tolerance, corners: 'round'}, overhang_mask)
+    overhang_mask = translate([0,0,lip_and_groove_tolerance],overhang_mask)
     //remove expanded overhang mask from bottom half
     bottom_half = subtract(bottom_half,overhang_mask)
 
@@ -193,7 +194,7 @@ function getObject({ wall_thickness, outer_width, outer_length, outer_height,rou
     bottom_half = subtract(bottom_half,screw_holes)
     top_half = subtract(top_half,screw_holes)
 
-    top_half = translate([outer_width+2,-outer_length,-outer_height],top_half)
+    top_half = translate([outer_width+8,-outer_length,-outer_height],top_half)
 
     top_half = rotate([Math.PI, 0, 0], top_half)
        
@@ -203,18 +204,18 @@ function getObject({ wall_thickness, outer_width, outer_length, outer_height,rou
 function getParameterDefinitions() {
     return [
         { name: 'wall_thickness', type: 'float', initial: 2, caption: 'wall_thickness' },
-        { name: 'outer_width', type: 'float', initial: 70, caption: 'outer_width' },
+        { name: 'outer_width', type: 'float', initial: 50, caption: 'outer_width' },
         { name: 'outer_length', type: 'float', initial: 70, caption: 'outer_length' },
         { name: 'outer_height', type: 'float', initial: 35, caption: 'outer_height' },
         { name: 'roundedness', type: 'float', initial: 1, caption: 'roundedness' },
         { name: 'hole_diameter', type: 'float', initial:20, caption: 'hole_diameter' },
         { name: 'holes_through_length', type: 'int', initial: 1, caption: 'holes_through_length' },
-        { name: 'holes_through_width', type: 'int', initial: 1, caption: 'holes_through_width' },
-        { name: 'hole_membrane_thickness', type: 'float', initial: 0.41, caption: 'hole_membrane_thickness' },
+        { name: 'holes_through_width', type: 'int', initial: 0, caption: 'holes_through_width' },
+        { name: 'hole_membrane_thickness', type: 'float', initial: 0, caption: 'hole_membrane_thickness' },
         { name: 'mounting_screw_diameter', type: 'float', initial: 2, caption: 'mounting_screw_diameter' },
         { name: 'mounting_screw_extra_depth', type: 'float', initial: 1, caption: 'mounting_screw_extra_depth' },
         { name: 'mounting_screw_rows', type: 'int', initial: 1, caption: 'mounting_screw_rows' },
-        { name: 'mounting_screw_row_gap', type: 'int', initial: 20, caption: 'mounting_screw_row_gap' },
+        { name: 'mounting_screw_row_gap', type: 'float', initial: 15, caption: 'mounting_screw_row_gap' },
     ];
 }
 
