@@ -27,7 +27,7 @@ function make_tube_section({ height, startRadius, endRadius, wall_thickness, cen
     return subtract(outer_cylinder, inner_cylinder)
 }
 
-function getObject({bottom_inner_diameter,top_inner_diameter,bottom_connector_length,top_connector_length,transition_length,wall_thickness,top_cut_width}) {
+function getObject({bottom_inner_diameter,top_inner_diameter,bottom_connector_length,snap_hook_width,top_connector_length,transition_length,wall_thickness,top_cut_width}) {
     let y = 0
     let btm_options = {
         startRadius: bottom_inner_diameter/2,
@@ -60,18 +60,23 @@ function getObject({bottom_inner_diameter,top_inner_diameter,bottom_connector_le
         let top_cut_negative = cuboid({size: [top_cut_width,top_inner_diameter*2, top_connector_length],center: [0, 0, y+(top_connector_length/1.2)]})
         final = subtract(final,top_cut_negative)
     }
+    if(snap_hook_width > 0){
+        let top_cut_negative = cuboid({size: [snap_hook_width,top_inner_diameter*2, 2],center: [0, 0, 4]})
+        final = subtract(final,top_cut_negative)
+    }
     return final
 }
 
 function getParameterDefinitions() {
     return [
-        { name: 'top_inner_diameter', type: 'float', initial: 144, caption: 'Top Inner Diameter' },
-        { name: 'bottom_inner_diameter', type: 'float', initial: 205, caption: 'Bottom Inner Diameter' }, 
-        { name: 'wall_thickness', type: 'float', initial: 1.2, caption: 'Wall thickness' },
-        { name: 'top_connector_length', type: 'float', initial: 50, caption: 'Top Connector Length' },
-        { name: 'bottom_connector_length', type: 'float', initial: 50, caption: 'Bottom Connector Length' },
-        { name: 'transition_length', type: 'float', initial: 50, caption: 'Transition Length' },
+        { name: 'top_inner_diameter', type: 'float', initial: 47, caption: 'Top Inner Diameter' },
+        { name: 'bottom_inner_diameter', type: 'float', initial: 50, caption: 'Bottom Inner Diameter' }, 
+        { name: 'wall_thickness', type: 'float', initial: 0.8, caption: 'Wall thickness' },
+        { name: 'top_connector_length', type: 'float', initial: 15, caption: 'Top Connector Length' },
+        { name: 'bottom_connector_length', type: 'float', initial: 77, caption: 'Bottom Connector Length' },
+        { name: 'transition_length', type: 'float', initial: 2, caption: 'Transition Length' },
         { name: 'top_cut_width', type: 'float', initial: 1, caption: 'Top Cut Width' },
+        { name: 'snap_hook_width', type: 'float', initial: 8, caption: 'Snap hook Width' },
     ];
 }
 
