@@ -1,13 +1,3 @@
-/**
- * Basic Text Creation
- * @category Creating Shapes
- * @skillLevel 10
- * @description Demonstrating methods of building 3D text
- * @tags text, font, characters
- * @authors Simon Clark
- * @licence MIT License
- */
-
 const jscad = require('@jscad/modeling')
 const { union,subtract} = jscad.booleans
 const { extrudeLinear } = jscad.extrusions
