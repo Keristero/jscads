@@ -26,6 +26,12 @@ const base_dimensions = {
     width:20.6
 }
 
+const bridge_dimensions = {
+    height:base_dimensions.height,
+    length:base_dimensions.length,
+    width:base_dimensions.width
+}
+
 const slider_dimensions = {
     height:1.2,
     length:50,
@@ -56,7 +62,7 @@ const right_hole_center = [(base_dimensions.length/3.3),0,base_dimensions.height
 
 const main = () => {
     const base = cuboid({size:[base_dimensions.length,base_dimensions.width,base_dimensions.height],center:base_center})
-    const middle_bridge = cuboid({size:[base_dimensions.length,6.5,base_dimensions.height/2],center:[0,0,(base_dimensions.height/4)]})
+    const middle_bridge = cuboid({size:[bridge_dimensions.length,bridge_dimensions.width,bridge_dimensions.height],center:[0,0,(bridge_dimensions.height/2)]})
     const top_slider = cuboid({size:[base_dimensions.length,slider_dimensions.width,slider_dimensions.height],center:top_slider_center})
     const bottom_slider = cuboid({size:[base_dimensions.length,slider_dimensions.width,slider_dimensions.height],center:bottom_slider_center})
 
