@@ -1,0 +1,1 @@
+ring thing used to repair an adjustable maniken
